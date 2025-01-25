@@ -11,6 +11,7 @@ namespace UnsafeComputerSecurityProject
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            Response.Headers.Add("X-XSS-Protection", "0");
             string name;
             string uemail;
             string passemail;
@@ -141,7 +142,7 @@ namespace UnsafeComputerSecurityProject
                 return;
             }
 
-            string updateQuery = @"UPDATE webapp.customers SET name = '" + txtUpdateCustomerName.Text + "', email = '"+ txtUpdateCustomerEmail.Text + "', phone = '"+ txtUpdateCustomerPhone.Text + "', address = '"+txtUpdateCustomerAddress+"', package_type = '"+txtUpdatePackageType.Text+"', package_price = '"+txtUpdatePackagePrice.Text+"'WHERE customer_ID = '"+txtUpdateCustomerID.Text+"'";
+            string updateQuery = @"UPDATE webapp.customers SET name = '" + txtUpdateCustomerName.Text + "', email = '"+ txtUpdateCustomerEmail.Text + "', phone = '"+ txtUpdateCustomerPhone.Text + "', address = '"+txtUpdateCustomerAddress.Text+"', package_type = '"+txtUpdatePackageType.Text+"', package_price = '"+txtUpdatePackagePrice.Text+"'WHERE customer_ID = '"+txtUpdateCustomerID.Text+"'";
             try
             {
                 using (var conn = new MySql.Data.MySqlClient.MySqlConnection(connString))

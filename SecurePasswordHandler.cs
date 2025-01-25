@@ -140,6 +140,69 @@ public class SecurePasswordHandler
         }
     }
 
+    public bool NaiveVerifyHashPassword(string userEmail, string password)
+    {
+        // Pretend you get this from your web.config
+        string connString = System.Configuration.ConfigurationManager.ConnectionStrings["WebAppConnString"].ToString();
+
+        using (var conn = new MySqlConnection(connString))
+        {
+            conn.Open();
+
+            // 1) Get the user's salt via unparameterized query
+            //
+            //    Suppose attacker enters userEmail as:  "' OR '1'='1' #"
+            //    That breaks out of the string and can match all rows or cause other havoc.
+            //
+            //    This alone is an SQL injection vulnerability.
+            //
+            string getSaltSql =
+                "SELECT salt " +
+                "FROM new_tableuserregistration " +
+                "WHERE email = '" + userEmail + "'";
+
+            string storedSalt = null;
+            using (var cmdSalt = new MySqlCommand(getSaltSql, conn))
+            {
+                object result = cmdSalt.ExecuteScalar();
+                if (result != null)
+                {
+                    storedSalt = result.ToString(); // Base64-encoded salt
+                }
+                else
+                {
+                    // No row found for this email
+                    return false;
+                }
+            }
+
+            // 2) Hash the input password using your HMAC with salt approach
+            byte[] saltBytes = Convert.FromBase64String(storedSalt);
+            byte[] inputHashBytes = HashPassword(password, saltBytes);
+            string base64InputHash = Convert.ToBase64String(inputHashBytes);
+
+            // 3) Naive comparison in SQL, again with string concatenation
+            //
+            //    If the attacker’s earlier input injected something like:
+            //         "' OR '1'='1' #"
+            //    The second clause (password_hash check) can be commented out or bypassed,
+            //    making the WHERE condition trivially true for any row.
+            //
+            string verifySql =
+                "SELECT COUNT(*) " +
+                "FROM new_tableuserregistration " +
+                "WHERE email = '" + userEmail + "'" +
+                "  AND password_hash = '" + base64InputHash + "'";
+
+            using (var cmdVerify = new MySqlCommand(verifySql, conn))
+            {
+                int count = Convert.ToInt32(cmdVerify.ExecuteScalar());
+                // If COUNT(*) > 0 => "login success" in naive logic
+                return (count > 0);
+            }
+        }
+    }
+
     public bool IsPasswordInHistory(string email, string password, int history_num)
     {
         string connString = System.Configuration.ConfigurationManager.ConnectionStrings["WebAppConnString"].ToString();
