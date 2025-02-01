@@ -1,7 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace UnsafeComputerSecurityProject
@@ -42,7 +41,7 @@ namespace UnsafeComputerSecurityProject
                     conn.Open();
 
                     // Step 1: Check if the user is currently locked out
-                    string lockoutCheckSql = "SELECT failed_login_attempts, locked_out_time FROM new_tableuserregistration WHERE email = '" + email + "'";
+                    string lockoutCheckSql = "SELECT failed_login_attempts, locked_out_time FROM new_tableuserregistration WHERE email = '"+ email + "'";
                     using (var lockoutCommand = new MySqlCommand(lockoutCheckSql, conn))
                     {
                         using (var reader = lockoutCommand.ExecuteReader())
@@ -73,8 +72,8 @@ namespace UnsafeComputerSecurityProject
                         }
                     }
 
-                    //string sql = "SELECT firstname, lastname FROM new_tableuserregistration WHERE email = '" + email + "' AND password = '" + password + "'";
                     // Step 2: Verify the password
+                    if (SecurePassword.NaiveVerifyHashPassword(userEmailTextBox.Text, passWordTextBox.Text))
                     {
                         // Reset failed login attempts on successful login
                         string resetAttemptsSql = "UPDATE new_tableuserregistration SET failed_login_attempts = 0, locked_out_time = NULL WHERE email ='" + email + "'";
@@ -134,7 +133,7 @@ namespace UnsafeComputerSecurityProject
                                         string lockoutSql = "UPDATE new_tableuserregistration SET locked_out_time = '" + DateTime.Now.AddMinutes(timeout) + "' WHERE email = '" + email + "'";
                                         using (var lockoutCommand = new MySqlCommand(lockoutSql, conn))
                                         {
-
+                                         
                                             lockoutCommand.ExecuteNonQuery();
                                         }
 
@@ -162,6 +161,7 @@ namespace UnsafeComputerSecurityProject
 
 
 
+
         protected void ForgotPasswordEventMethod(object sender, EventArgs e)
         {
             Session.Abandon();
@@ -174,6 +174,11 @@ namespace UnsafeComputerSecurityProject
             Session.Abandon();
             Response.BufferOutput = true;
             Response.Redirect("Registration.aspx", false);
+        }
+        private int ExtractNumber(string rule)
+        {
+            var match = Regex.Match(rule, @"\d+");
+            return match.Success ? int.Parse(match.Value) : 0;
         }
     }
 
