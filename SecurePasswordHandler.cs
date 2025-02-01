@@ -38,7 +38,7 @@ public class SecurePasswordHandler
     }
 
     // Hash password using HMAC-SHA256 with salt
-    private byte[] HashPassword(string password, byte[] salt)
+    public byte[] HashPassword(string password, byte[] salt)
     {
         using (var hmac = new HMACSHA256(salt))
         {
@@ -165,8 +165,8 @@ public class SecurePasswordHandler
                 {
                     // No row found for this email
                     return false;
-                }
-            }
+        }
+    }
 
             byte[] saltBytes = Convert.FromBase64String(storedSalt);
             byte[] inputHashBytes = HashPassword(password, saltBytes);
@@ -305,6 +305,7 @@ public class SecurePasswordHandler
             {
                 int History_num = ExtractNumber(rule);
 
+                //userEmail = (string)(Session["userEmail"]);
                 // Check if the password matches any of the last 3 passwords
                 SecurePasswordHandler SecurePassword = new SecurePasswordHandler();
                 if (IsPasswordInHistory(userEmail, password, History_num))
@@ -314,7 +315,6 @@ public class SecurePasswordHandler
             }
             else
             {
-                
             }
         }
 
@@ -327,7 +327,6 @@ public class SecurePasswordHandler
         var match = Regex.Match(rule, @"\d+");
         return match.Success ? int.Parse(match.Value) : 0;
     }
-    
 
 }
 

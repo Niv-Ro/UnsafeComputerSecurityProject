@@ -148,13 +148,13 @@
             </table>-->
             <asp:GridView ID="CustomerGridView" runat="server" CssClass="table table-bordered" AutoGenerateColumns="False">
                 <Columns>
-                    <asp:BoundField DataField="customer_ID" HeaderText="Customer ID" HtmlEncode="false"/>
-                    <asp:BoundField DataField="name" HeaderText="Name" HtmlEncode="false"/>
-                    <asp:BoundField DataField="email" HeaderText="Email" HtmlEncode="false"/>
-                    <asp:BoundField DataField="phone" HeaderText="Phone" HtmlEncode="false"/>
-                    <asp:BoundField DataField="address" HeaderText="Address" HtmlEncode="false"/>
-                    <asp:BoundField DataField="package_type" HeaderText="Package Type" HtmlEncode="false"/>
-                    <asp:BoundField DataField="package_price" HeaderText="Package Price" HtmlEncode="false"/>
+                    <asp:BoundField DataField="customer_ID" HeaderText="Customer ID" />
+                    <asp:BoundField DataField="name" HeaderText="Name" />
+                    <asp:BoundField DataField="email" HeaderText="Email" />
+                    <asp:BoundField DataField="phone" HeaderText="Phone" />
+                    <asp:BoundField DataField="address" HeaderText="Address" />
+                    <asp:BoundField DataField="package_type" HeaderText="Package Type" />
+                    <asp:BoundField DataField="package_price" HeaderText="Package Price" />
                 </Columns>
             </asp:GridView>
         </div>
