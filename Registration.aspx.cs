@@ -20,12 +20,11 @@ namespace UnsafeComputerSecurityProject
 
 
             /// change to  hash and salt in registration
-
-            if (SecurePassword.ValidatePassword(passWordTextBox.Text, ref validationErrors, emailTextBox.Text)) // Validate password before registering
+            if (checkUserExists(emailTextBox.Text.ToString()) == false)
             {
-                if (EmailIsValid(emailTextBox.Text))
+                if (SecurePassword.ValidatePassword(passWordTextBox.Text, ref validationErrors, emailTextBox.Text)) // Validate password before registering
                 {
-                    if (checkUserExists(emailTextBox.Text.ToString()) == false)
+                    if (EmailIsValid(emailTextBox.Text))
                     {
                         RegisterUser();
                         Session.Abandon();
@@ -34,24 +33,23 @@ namespace UnsafeComputerSecurityProject
                     }
                     else
                     {
-                        errorLabel.Text = "Email is already exists";
+                        errorLabel.Text = "Email is not valid";
                         errorLabel.Visible = true;
                         errorLabel.ForeColor = System.Drawing.Color.Red;
                     }
-
                 }
                 else
                 {
-                    errorLabel.Text = "Email is not valid";
+
+                    // Show error message to the user
+                    errorLabel.Text = string.Join("<br/>", validationErrors);
                     errorLabel.Visible = true;
                     errorLabel.ForeColor = System.Drawing.Color.Red;
                 }
-
             }
             else
             {
-                // Show error message to the user
-                errorLabel.Text = string.Join("<br/>", validationErrors);
+                errorLabel.Text = "Email is already exists";
                 errorLabel.Visible = true;
                 errorLabel.ForeColor = System.Drawing.Color.Red;
             }
@@ -88,7 +86,7 @@ namespace UnsafeComputerSecurityProject
                 return false;
             }
         }
-        private void RegisterUser()
+        private bool RegisterUser()
         {
 
             /*
@@ -109,7 +107,19 @@ namespace UnsafeComputerSecurityProject
 
                 using (var cmd = new MySql.Data.MySqlClient.MySqlCommand(queryStr1, conn))
                 {
-                    cmd.ExecuteNonQuery();
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        errorLabel.Text = ex.ToString();
+                        errorLabel.Visible = true;
+                        return false;
+                    }
+                    
+                    
                 }
                 // Execute the second INSERT statement
                 using (var cmd2 = new MySql.Data.MySqlClient.MySqlCommand(queryStr2, conn))
@@ -117,6 +127,7 @@ namespace UnsafeComputerSecurityProject
                     cmd2.ExecuteNonQuery();
                 }
             }
+            return true;
         }
 
         private bool checkUserExists(string email)

@@ -119,9 +119,9 @@ namespace UnsafeComputerSecurityProject
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                addMessage.Text = "Error adding customer, customer with this id is already exists";
+                addMessage.Text = "Error adding customer, customer with this id is already exists" + ex.Message;
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "keepModalOpen",
                     "$('#addCustomerModal').modal('show');", true);
             }
@@ -212,9 +212,9 @@ namespace UnsafeComputerSecurityProject
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                deleteMessage.Text = "Error deleting customer";
+                deleteMessage.Text = "Error deleting customer"+ ex.Message ;
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "keepModalOpen",
                     "$('#deleteCustomerModal').modal('show');", true);
             }
