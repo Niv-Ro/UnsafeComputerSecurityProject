@@ -119,8 +119,9 @@ namespace UnsafeComputerSecurityProject
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                addMessage.Text = "Error adding customer, customer with this id is already exists" + ex.Message;
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "keepModalOpen",
                     "$('#addCustomerModal').modal('show');", true);
             }
@@ -141,6 +142,7 @@ namespace UnsafeComputerSecurityProject
                 return;
             }
 
+            string updateQuery = @"UPDATE webapp.customers SET name = '" + txtUpdateCustomerName.Text + "', email = '"+ txtUpdateCustomerEmail.Text + "', phone = '"+ txtUpdateCustomerPhone.Text + "', address = '"+txtUpdateCustomerAddress.Text+"', package_type = '"+txtUpdatePackageType.Text+"', package_price = '"+txtUpdatePackagePrice.Text+"'WHERE customer_ID = '"+txtUpdateCustomerID.Text+"'";
             try
             {
                 using (var conn = new MySql.Data.MySqlClient.MySqlConnection(connString))
@@ -210,7 +212,9 @@ namespace UnsafeComputerSecurityProject
                     }
                 }
             }
+            catch (Exception ex)
             {
+                deleteMessage.Text = "Error deleting customer"+ ex.Message ;
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "keepModalOpen",
                     "$('#deleteCustomerModal').modal('show');", true);
             }

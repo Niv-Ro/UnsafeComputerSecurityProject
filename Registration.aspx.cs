@@ -5,9 +5,7 @@ namespace UnsafeComputerSecurityProject
 {
     public partial class Registration : System.Web.UI.Page
     {
-        //MySql.Data.MySqlClient.MySqlConnection conn;
-        //MySql.Data.MySqlClient.MySqlCommand cmd;
-        //string queryStr;
+        
         private List<string> validationErrors = new List<string>();
         SecurePasswordHandler SecurePassword = new SecurePasswordHandler();
 
@@ -20,11 +18,11 @@ namespace UnsafeComputerSecurityProject
 
 
             /// change to  hash and salt in registration
-            if (SecurePassword.ValidatePassword(passWordTextBox.Text, ref validationErrors, emailTextBox.Text)) // Validate password before registering
+            if (checkUserExists(emailTextBox.Text.ToString()) == false)
             {
-                if (EmailIsValid(emailTextBox.Text))
+                if (SecurePassword.ValidatePassword(passWordTextBox.Text, ref validationErrors, emailTextBox.Text)) // Validate password before registering
                 {
-                    if (checkUserExists(emailTextBox.Text.ToString()) == false)
+                    if (EmailIsValid(emailTextBox.Text))
                     {
                         RegisterUser();
                         Session.Abandon();
@@ -33,42 +31,29 @@ namespace UnsafeComputerSecurityProject
                     }
                     else
                     {
+                        errorLabel.Text = "Email is not valid";
                         errorLabel.Visible = true;
                         errorLabel.ForeColor = System.Drawing.Color.Red;
                     }
-
                 }
                 else
                 {
+
+                    // Show error message to the user
+                    errorLabel.Text = string.Join("<br/>", validationErrors);
                     errorLabel.Visible = true;
                     errorLabel.ForeColor = System.Drawing.Color.Red;
                 }
-
             }
             else
             {
+                errorLabel.Text = "Email is already exists";
                 errorLabel.Visible = true;
                 errorLabel.ForeColor = System.Drawing.Color.Red;
             }
 
         }
 
-
-        /*private void RegisterUser()
-        {
-            string connString = System.Configuration.ConfigurationManager.ConnectionStrings["WebAppConnString"].ToString();
-            
-            conn = new MySql.Data.MySqlClient.MySqlConnection(connString);
-            conn.Open();
-            queryStr = "";
-            queryStr = "INSERT INTO webapp.new_tableuserregistration(firstname,lastname,username,password,email)" +
-                "VALUES('" + firstNameTextBox.Text + "','" + lastNameTextBox.Text + "','" + userNameTextBox.Text + "','" + passWordTextBox.Text + "','" + emailTextBox.Text + "')";
-            cmd = new MySql.Data.MySqlClient.MySqlCommand(queryStr, conn);
-            cmd.ExecuteReader();
-
-            conn.Close();
-
-        }*/
 
         public bool EmailIsValid(string emailaddress)
         {
@@ -83,8 +68,10 @@ namespace UnsafeComputerSecurityProject
                 return false;
             }
         }
+        private bool RegisterUser()
         {
 
+          
 
             string connString = System.Configuration.ConfigurationManager.ConnectionStrings["WebAppConnString"].ToString();
             SecurePasswordHandler SecurePassword = new SecurePasswordHandler();
@@ -108,10 +95,12 @@ namespace UnsafeComputerSecurityProject
                     }
                     catch (Exception ex)
                     {
+                        errorLabel.Text = ex.ToString();
                         errorLabel.Visible = true;
-
+                        return false;
                     }
-
+                    
+                    
                 }
                 // Execute the second INSERT statement
                 using (var cmd2 = new MySql.Data.MySqlClient.MySqlCommand(queryStr2, conn))

@@ -4,8 +4,6 @@ using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 
-
-
 namespace UnsafeComputerSecurityProject
 {
     public partial class Forgot_password : System.Web.UI.Page
