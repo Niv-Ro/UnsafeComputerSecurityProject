@@ -5,9 +5,7 @@ namespace UnsafeComputerSecurityProject
 {
     public partial class Registration : System.Web.UI.Page
     {
-        //MySql.Data.MySqlClient.MySqlConnection conn;
-        //MySql.Data.MySqlClient.MySqlCommand cmd;
-        //string queryStr;
+        
         private List<string> validationErrors = new List<string>();
         SecurePasswordHandler SecurePassword = new SecurePasswordHandler();
 
@@ -57,22 +55,6 @@ namespace UnsafeComputerSecurityProject
         }
 
 
-        /*private void RegisterUser()
-        {
-            string connString = System.Configuration.ConfigurationManager.ConnectionStrings["WebAppConnString"].ToString();
-            
-            conn = new MySql.Data.MySqlClient.MySqlConnection(connString);
-            conn.Open();
-            queryStr = "";
-            queryStr = "INSERT INTO webapp.new_tableuserregistration(firstname,lastname,username,password,email)" +
-                "VALUES('" + firstNameTextBox.Text + "','" + lastNameTextBox.Text + "','" + userNameTextBox.Text + "','" + passWordTextBox.Text + "','" + emailTextBox.Text + "')";
-            cmd = new MySql.Data.MySqlClient.MySqlCommand(queryStr, conn);
-            cmd.ExecuteReader();
-
-            conn.Close();
-
-        }*/
-
         public bool EmailIsValid(string emailaddress)
         {
             try
@@ -89,8 +71,7 @@ namespace UnsafeComputerSecurityProject
         private bool RegisterUser()
         {
 
-            /*
-            */
+          
 
             string connString = System.Configuration.ConfigurationManager.ConnectionStrings["WebAppConnString"].ToString();
             SecurePasswordHandler SecurePassword = new SecurePasswordHandler();

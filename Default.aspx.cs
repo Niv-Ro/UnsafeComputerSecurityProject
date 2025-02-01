@@ -72,7 +72,6 @@ namespace UnsafeComputerSecurityProject
                         }
                     }
 
-                    //string sql = "SELECT firstname, lastname FROM new_tableuserregistration WHERE email = '" + email + "' AND password = '" + password + "'";
                     // Step 2: Verify the password
                     if (SecurePassword.NaiveVerifyHashPassword(userEmailTextBox.Text, passWordTextBox.Text))
                     {
