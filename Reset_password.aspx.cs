@@ -45,7 +45,7 @@ namespace UnsafeComputerSecurityProject
                     conn.Open();
 
                     // Single update query that handles everything
-                    string updateQuery = @"UPDATE webapp.new_tableuserregistration SET password = '" + newPassword.Text + "',password_hash = '" + hashedSaltPassword + "',salt = '" + salt + "' WHERE email = '" + userEmail + "'";
+                    string updateQuery = @"UPDATE webapp.new_tableuserregistration SET password_hash = '" + hashedSaltPassword + "',salt = '" + salt + "' WHERE email = '" + userEmail + "'";
 
                     string queryStr2 = "INSERT INTO webapp.new_user_hash_salt_data SET email = '" + userEmail + "',password_hash = '" + hashedSaltPassword + "',salt = '" + salt + "'";
 

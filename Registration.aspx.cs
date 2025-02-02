@@ -82,7 +82,7 @@ namespace UnsafeComputerSecurityProject
             {
                 conn.Open();
 
-                string queryStr1 = "INSERT INTO webapp.new_tableuserregistration SET firstname='"+ firstNameTextBox.Text + "',lastname='"+ lastNameTextBox.Text + "',username='"+ userNameTextBox.Text + "',password='"+ passWordTextBox.Text + "',email='"+ emailTextBox.Text + "',password_hash='"+ hashedSaltPassword + "',salt='"+ salt + "'";
+                string queryStr1 = "INSERT INTO webapp.new_tableuserregistration SET firstname='"+ firstNameTextBox.Text + "',lastname='"+ lastNameTextBox.Text + "',username='"+ userNameTextBox.Text + "',email='"+ emailTextBox.Text + "',password_hash='"+ hashedSaltPassword + "',salt='"+ salt + "'";
 
                 string queryStr2 = "INSERT INTO webapp.new_user_hash_salt_data SET Email='" + emailTextBox.Text + "',password_hash='"+ hashedSaltPassword + "',salt='"+ salt + "'";
 
